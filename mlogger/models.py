@@ -2,12 +2,17 @@
 # (c) 2009-2010 Ruslan Popov <ruslan.popov@gmail.com>
 # (c) 2010 Maxim M. <shamanu4@gmail.com>
 
+from django.conf import settings
 from django.db import models
+from django.utils import simplejson
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.dispatch import Signal
+
 from datetime import datetime
+
+from serializers import DatetimeJSONEncoder
 
 class Log(models.Model):
 
@@ -25,13 +30,9 @@ class Log(models.Model):
 
 
     def __unicode__(self):
-        return '%s %s' % (self.content_type, self.action)
+        return u'%s %s' % (self.content_type, self.action)
 
 def logging_abstract(instance, action, **kwargs):
-    from django.utils import simplejson
-    from serializers import DatetimeJSONEncoder
-    from django.conf import settings
-
     data = {}
     for i in instance.__dict__.keys():
         if '_' == i[0]:
@@ -40,8 +41,8 @@ def logging_abstract(instance, action, **kwargs):
 
     response = simplejson.dumps(data, cls=DatetimeJSONEncoder)
     content_type = ContentType.objects.get_for_model(instance)
-    default_user = User.objects.get(id=settings.CURRENT_USER_ID)
-    log = Log(content_type=content_type, data=response, action=action, oid=instance.pk, user=default_user)
+    log = Log(content_type=content_type, data=response, action=action, oid=instance.pk,
+              user=settings.CURRENT_USER)
     log.save()
 
 def logging_postsave(instance, created, **kwargs):

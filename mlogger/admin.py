@@ -5,7 +5,7 @@
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 
-from logger.models import Log
+from mlogger.models import Log
 
 class __Log(admin.ModelAdmin):
     list_display = ('user', 'action', 'content_type', 'timestamp')
