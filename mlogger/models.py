@@ -16,7 +16,7 @@ from serializers import DatetimeJSONEncoder
 
 class Log(models.Model):
 
-    user = models.ForeignKey(User, verbose_name=_(u'user'), null=True, blank=True)
+    user = models.ForeignKey(User, related_name="userLog", verbose_name=_(u'user'), null=True, blank=True)
     action = models.CharField(verbose_name=_(u'action'), max_length=64)
     content_type = models.ForeignKey(ContentType,verbose_name=_('content type'))
     oid = models.PositiveIntegerField(verbose_name=_('object id'))
