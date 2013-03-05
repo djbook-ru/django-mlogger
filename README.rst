@@ -8,7 +8,7 @@ Installation
 * Add the following lines into settings.py::
 
     INSTALLED_APPS += ('mlogger',)
-    MIDDLEWARE_CLASSES += ('mlogger.middleware',)
+    MIDDLEWARE_CLASSES += ('mlogger.middleware.CurrentUserMiddleware',)
 
 Usage
 -----
